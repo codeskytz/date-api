@@ -1,0 +1,37 @@
+{
+  "endpoint": "/api/v1/auth/register",
+  "method": "POST",
+  "description": "Create a new user account and receive a personal access token for authentication",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "name": "John Doe",
+      "username": "johndoe",
+      "email": "john@example.com",
+      "password": "Password123",
+      "password_confirmation": "Password123"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Account created successfully",
+      "token": "8LKNCrTdYhyZkFiowtadpJC7hMFVLABn3QWWYOW2srbSgMPXfiCxsV84twTs"
+    }
+  },
+  "notes": [
+    "Password must be at least 8 characters",
+    "Username must be unique",
+    "Email must be unique and valid",
+    "Token is returned in plain format (keep it secret!)",
+    "Store the token securely on the client side"
+  ]
+}

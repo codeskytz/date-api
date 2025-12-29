@@ -1,0 +1,55 @@
+{
+  "endpoint": "/api/v1/my/following",
+  "method": "GET",
+  "description": "Retrieve the authenticated user's following list",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer {token}"
+    },
+    "parameters": {
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "username": "alice_4446",
+      "following_count": 2,
+      "data": [
+        {
+          "id": 13,
+          "name": "Bob Smith",
+          "username": "bob_5110",
+          "avatar": null
+        },
+        {
+          "id": 14,
+          "name": "Charlie Davis",
+          "username": "charlie_5111",
+          "avatar": null
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 2,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "Authentication required",
+    "Returns the authenticated user's following list",
+    "Supports pagination with page and limit parameters",
+    "Default limit is 20 items per page",
+    "Returns 401 if authentication token is invalid or missing"
+  ]
+}

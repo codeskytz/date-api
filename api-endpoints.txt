@@ -1,0 +1,798 @@
+Overview
+This document defines the complete API map and master database schema for a scalable, load-balanced social media platform built using Laravel, Redis, OAuth, and modern backend architecture.
+API Base Configuration
+Base URL: /api/v1
+Authentication: Bearer Token (JWT or Sanctum)
+All endpoints are stateless.
+Authentication & OAuth APIs
+POST /auth/register
+POST /auth/login
+GET /oauth/{provider}/redirect
+GET /oauth/{provider}/callback
+User & Account APIs
+GET /me
+GET /users/{username}
+PUT /me
+GET /account/privacy
+POST /account/privacy
+Verification APIs
+POST /verification/request
+GET /verification/status
+Admin approval and rejection endpoints
+Post APIs
+POST /posts
+GET /feed
+POST /posts/{id}/like
+POST /posts/{id}/comments
+POST /posts/{id}/save
+Story APIs
+POST /stories
+GET /stories/feed
+POST /stories/{id}/view
+Follow & Matching APIs
+POST /users/{id}/follow
+DELETE /users/{id}/follow
+GET /matches
+Chat APIs
+POST /messages
+GET /messages/{user_id}
+Notification APIs
+GET /notifications
+GET /notifications/settings
+POST /notifications/settings
+Safety & Moderation APIs
+POST /users/{id}/block
+POST /reports/post|user|story
+Analytics APIs
+GET /posts/{id}/insights
+GET /analytics/profile
+Admin APIs
+POST /api/admin/auth/login
+GET /api/admin/dashboard
+GET /api/admin/users
+POST /api/admin/users/{id}/ban
+System APIs
+GET /health
+Database Schema
+
+POST /api/auth/register
+
+Request
+{
+  "name": "John Doe",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "StrongPassword123",
+  "password_confirmation": "StrongPassword123"
+}
+
+Response (201)
+{
+  "status": "success",
+  "message": "Account created successfully",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+2️⃣ Login
+
+POST /api/auth/login
+
+Request
+{
+  "email": "john@example.com",
+  "password": "StrongPassword123"
+}
+
+Response (200)
+{
+  "status": "success",
+  "token": "jwt_access_token_here",
+  "user": {
+    "id": 1,
+    "username": "johndoe"
+  }
+}
+
+👤 USER PROFILE APIs
+3️⃣ Get My Profile
+
+GET /api/me
+
+Headers
+
+Authorization: Bearer jwt_access_token
+
+Response
+{
+  "id": 1,
+  "name": "John Doe",
+  "username": "johndoe",
+  "avatar": "https://cdn.example.com/avatar.jpg",
+  "followers": 120,
+  "following": 80
+}
+
+4️⃣ View User Profile
+
+GET /api/users/{username}
+
+Response
+{
+  "username": "johndoe",
+  "bio": "Laravel developer",
+  "followers": 120,
+  "posts": 34,
+  "is_following": true
+}
+
+📝 POSTS APIs
+5️⃣ Create Post
+
+POST /api/posts
+
+Request
+{
+  "content": "Hello world 🌍",
+  "media": ["https://cdn.example.com/photo.jpg"]
+}
+
+Response (201)
+{
+  "post_id": 101,
+  "message": "Post created successfully"
+}
+
+6️⃣ Get Feed (Cached)
+
+GET /api/feed?page=1
+
+Response
+{
+  "page": 1,
+  "data": [
+    {
+      "post_id": 101,
+      "author": "johndoe",
+      "content": "Hello world 🌍",
+      "likes": 10,
+      "comments": 2,
+      "created_at": "2025-12-29T10:20:00Z"
+    }
+  ]
+}
+
+
+🔥 This endpoint is usually Redis cached
+
+❤️ INTERACTIONS APIs
+7️⃣ Like / Unlike Post
+
+POST /api/posts/{id}/like
+
+Response
+{
+  "liked": true,
+  "total_likes": 11
+}
+
+8️⃣ Comment on Post
+
+POST /api/posts/{id}/comments
+
+Request
+{
+  "comment": "Nice post 🔥"
+}
+
+Response
+{
+  "comment_id": 501,
+  "message": "Comment added"
+}
+
+🤝 FOLLOW SYSTEM APIs
+9️⃣ Follow User
+
+POST /api/users/{id}/follow
+
+Response
+{
+  "following": true
+}
+
+🔔 NOTIFICATIONS APIs
+🔟 Get Notifications
+
+GET /api/notifications
+
+Response
+{
+  "data": [
+    {
+      "type": "like",
+      "from": "janedoe",
+      "post_id": 101,
+      "created_at": "2025-12-29T12:00:00Z"
+    }
+  ]
+}
+
+💬 CHAT APIs (REST + WebSocket)
+1️⃣1️⃣ Send Message
+
+POST /api/messages
+
+Request
+{
+  "to_user_id": 2,
+  "message": "Hey, how are you?"
+}
+
+Response
+{
+  "message_id": 7001,
+  "status": "sent"
+}
+
+1️⃣2️⃣ Fetch Messages
+
+GET /api/messages/{user_id}
+
+Response
+{
+  "messages": [
+    {
+      "from": "johndoe",
+      "message": "Hey, how are you?",
+      "timestamp": "2025-12-29T12:05:00Z"
+    }
+  ]
+}
+
+🔍 SEARCH APIs
+1️⃣3️⃣ Search Users & Posts
+
+GET /api/search?q=laravel
+
+Response
+{
+  "users": ["johndoe", "laravelguru"],
+  "posts": [
+    {
+      "post_id": 301,
+      "content": "Laravel scaling tips"
+    }
+  ]
+}
+
+🩺 SYSTEM APIs
+1️⃣4️⃣ Health Check (Load Balancer)
+
+GET /health
+
+Response
+{
+  "status": "ok",
+  "server_time": "2025-12-29T12:10:00Z"
+}
+
+
+🔥 Used by load balancer to detect failures
+
+🧠 IMPORTANT DESIGN NOTES
+
+All APIs are stateless
+
+Auth via JWT / Sanctum
+
+Sessions stored in Redis
+
+Media stored in S3 / R2
+
+Works perfectly with multiple Laravel servers
+
+Load balancer can route any request to any server 😎
+
+Want next? 🚀
+
+I can:
+
+Map these APIs to Laravel Controllers
+
+Generate routes/api.php
+
+Design DB schema
+
+Create Swagger/OpenAPI docs
+
+Export everything into an official .docx
+
+Just say what’s next 🔥😎
+
+mmmmh how about admin endpoints  for management of social  media also some crucial endpoints like story posting   mtching for the  followed  each oother profiles , also   how about 0auth endpoints how can i handle them in api
+
+Great direction 😎🔥
+Below is a clean, production-grade API design covering ADMIN endpoints, Stories, Mutual-follow matching, and OAuth handling in APIs (Laravel-friendly).
+Everything is load-balancer safe, stateless, and scalable ⚡
+
+🛡️ ADMIN API ENDPOINTS (MANAGEMENT)
+
+Admin APIs are separate, protected by:
+
+Admin role
+
+Admin middleware
+
+Strong rate-limits
+
+Optional IP allow-list
+
+Base prefix:
+
+/api/admin/*
+
+1️⃣ Admin Login
+
+POST /api/admin/auth/login
+
+{
+  "email": "admin@platform.com",
+  "password": "VeryStrongPassword"
+}
+
+
+Response
+
+{
+  "token": "admin_jwt_token",
+  "role": "admin"
+}
+
+2️⃣ Dashboard Stats
+
+GET /api/admin/dashboard
+
+{
+  "users": 12450,
+  "posts": 89320,
+  "stories": 3421,
+  "reports": 54,
+  "active_today": 2130
+}
+
+3️⃣ Manage Users
+Get all users
+
+GET /api/admin/users?page=1
+
+{
+  "data": [
+    {
+      "id": 1,
+      "username": "johndoe",
+      "status": "active",
+      "verified": false
+    }
+  ]
+}
+
+Ban / Unban User
+
+POST /api/admin/users/{id}/ban
+
+{
+  "reason": "Spam activity"
+}
+
+
+Response
+
+{
+  "status": "banned"
+}
+
+4️⃣ Content Moderation
+Get reported posts
+
+GET /api/admin/reports/posts
+
+{
+  "reports": [
+    {
+      "post_id": 101,
+      "reason": "Inappropriate content",
+      "reported_by": 55
+    }
+  ]
+}
+
+Delete post
+
+DELETE /api/admin/posts/{id}
+
+{
+  "status": "deleted"
+}
+
+5️⃣ Platform Controls
+
+POST /api/admin/settings
+
+{
+  "registration_enabled": true,
+  "max_story_duration": 24
+}
+
+📸 STORY APIs (Like Instagram / WhatsApp)
+
+Stories are temporary content (24h), cached heavily, and CDN-served.
+
+6️⃣ Create Story
+
+POST /api/stories
+
+{
+  "media": "https://cdn.example.com/story.mp4",
+  "type": "video",
+  "duration": 15
+}
+
+
+Response
+
+{
+  "story_id": 901,
+  "expires_at": "2025-12-30T12:00:00Z"
+}
+
+7️⃣ Get Stories Feed
+
+GET /api/stories/feed
+
+{
+  "stories": [
+    {
+      "user": "janedoe",
+      "stories": [
+        {
+          "story_id": 901,
+          "media": "https://cdn.example.com/story.mp4"
+        }
+      ]
+    }
+  ]
+}
+
+
+🔥 Cached in Redis
+🔥 Only from followed users
+
+8️⃣ View Story (Tracking)
+
+POST /api/stories/{id}/view
+
+{
+  "viewed": true
+}
+
+🔁 MATCHING (MUTUAL FOLLOW SYSTEM)
+
+Used for:
+
+Private chat enablement
+
+Profile suggestions
+
+“Matched” users logic
+
+9️⃣ Get Mutual Matches
+
+GET /api/matches
+
+{
+  "matches": [
+    {
+      "user_id": 7,
+      "username": "alex",
+      "matched_at": "2025-12-29T09:00:00Z"
+    }
+  ]
+}
+
+Matching Logic (Backend)
+User A follows B
+User B follows A
+→ MATCH CREATED
+
+
+🔥 Stored in matches table
+🔥 Cached per user
+
+🔟 Match Status Check
+
+GET /api/users/{id}/match-status
+
+{
+  "matched": true
+}
+
+🔐 OAUTH API HANDLING (VERY IMPORTANT)
+
+Laravel handles OAuth without sessions using API tokens.
+
+Supported:
+
+Google
+
+Facebook
+
+GitHub
+
+Apple
+
+1️⃣1️⃣ OAuth Redirect (Client Step)
+
+Client redirects user to:
+
+/api/oauth/google/redirect
+
+1️⃣2️⃣ OAuth Callback (Backend)
+
+GET /api/oauth/google/callback?code=XXXX
+
+Backend Flow
+
+Exchange code → provider token
+
+Fetch user profile
+
+Create or update user
+
+Issue JWT / Sanctum token
+
+Response
+
+{
+  "token": "jwt_access_token",
+  "user": {
+    "id": 55,
+    "email": "user@gmail.com"
+  }
+}
+
+
+🔥 No PHP sessions
+🔥 Works perfectly behind load balancer
+
+1️⃣3️⃣ OAuth Mobile / SPA (Token Flow)
+
+For mobile apps:
+
+POST /api/oauth/google/token
+
+{
+  "access_token": "google_access_token"
+}
+
+
+Response
+
+{
+  "token": "jwt_access_token"
+}
+
+🧠 SECURITY & SCALING NOTES
+
+Admin APIs → separate middleware
+
+Stories → auto-expire via scheduled jobs
+
+Matching → indexed & cached
+
+OAuth → stateless token exchange
+
+Redis → sessions, cache, rate limits
+
+CDN → all story media
+
+🔵 VERIFIED PROFILE (BLUE TICK) SYSTEM
+🎯 Verification Types
+
+You can support multiple verification levels:
+
+Type	Meaning
+identity	Real person (ID-based)
+business	Registered company
+creator	Public figure / influencer
+system	Manually granted (VIP, staff)
+📌 USER-SIDE ENDPOINTS
+1️⃣ Request Verification
+
+POST /api/verification/request
+
+Request
+{
+  "type": "identity",
+  "full_name": "John Michael Doe",
+  "document_type": "passport",
+  "document_front": "https://cdn.example.com/id-front.jpg",
+  "document_back": "https://cdn.example.com/id-back.jpg",
+  "selfie": "https://cdn.example.com/selfie.jpg",
+  "note": "Public speaker and tech blogger"
+}
+
+Response
+{
+  "status": "submitted",
+  "message": "Verification request submitted successfully"
+}
+
+
+🔥 Stored as PENDING
+🔥 Documents stored securely (private bucket)
+
+2️⃣ Get Verification Status
+
+GET /api/verification/status
+
+Response
+{
+  "verified": false,
+  "status": "pending",
+  "type": "identity",
+  "submitted_at": "2025-12-28T15:20:00Z"
+}
+
+3️⃣ Cancel Verification Request
+
+DELETE /api/verification/cancel
+
+{
+  "status": "cancelled"
+}
+
+🛡️ ADMIN-SIDE ENDPOINTS (REVIEW)
+
+Base:
+
+/api/admin/verification/*
+
+4️⃣ List Pending Requests
+
+GET /api/admin/verification/pending
+
+{
+  "data": [
+    {
+      "request_id": 12,
+      "user": {
+        "id": 55,
+        "username": "johndoe"
+      },
+      "type": "identity",
+      "submitted_at": "2025-12-28T15:20:00Z"
+    }
+  ]
+}
+
+5️⃣ View Verification Details
+
+GET /api/admin/verification/{id}
+
+{
+  "request_id": 12,
+  "documents": {
+    "front": "secure-url",
+    "back": "secure-url",
+    "selfie": "secure-url"
+  },
+  "note": "Public speaker and tech blogger"
+}
+
+6️⃣ Approve Verification (Blue Tick)
+
+POST /api/admin/verification/{id}/approve
+
+{
+  "badge": "blue",
+  "expires_at": null
+}
+
+Response
+{
+  "status": "approved",
+  "verified_at": "2025-12-29T12:00:00Z"
+}
+
+
+🔥 Sets:
+
+users.verified = true
+users.verified_type = identity
+
+7️⃣ Reject Verification
+
+POST /api/admin/verification/{id}/reject
+
+{
+  "reason": "Document unclear"
+}
+
+{
+  "status": "rejected"
+}
+
+🧱 DATABASE STRUCTURE (IMPORTANT)
+users table
+verified BOOLEAN DEFAULT false
+verified_type ENUM('identity','business','creator','system')
+verified_at TIMESTAMP NULL
+
+verification_requests table
+id
+user_id
+type
+status ENUM('pending','approved','rejected','cancelled')
+document_front
+document_back
+selfie
+note
+reviewed_by
+reviewed_at
+created_at
+
+🔐 SECURITY BEST PRACTICES (CRITICAL)
+
+Documents stored in private storage
+
+Signed URLs (temporary access)
+
+Admin access only
+
+Rate-limit verification requests
+
+One active request per user
+
+Audit logs for approvals
+
+🎨 FRONTEND DISPLAY LOGIC
+if user.verified == true
+→ show blue tick icon 🔵
+
+
+For API:
+
+{
+  "username": "johndoe",
+  "verified": true,
+  "verified_type": "identity"
+}
+
+⚡ PERFORMANCE & SCALING
+
+Verification status cached in Redis
+
+Blue tick embedded in profile payload
+
+No extra DB hits for feeds
+
+Works across all load-balanced servers
+
+🧠 OPTIONAL ADVANCED FEATURES
+
+Paid verification (Stripe)
+
+Expiring verification
+
+Auto-verification for large followers
+
+AI document validation (future)
+
+Multiple badge colors (gold, gray)
+
+
+Core tables: users, posts, comments, likes, follows, matches, stories, messages, notifications, verification_requests, reports, blocks, saved_posts, oauth_accounts, admin_users
+Infrastructure Notes
+Redis for sessions/cache, CDN for media, queues for background jobs, cron for cleanup tasks.
+Conclusion
+This master specification is production-ready and suitable for enterprise Laravel deployments.

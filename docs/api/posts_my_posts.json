@@ -1,0 +1,51 @@
+{
+  "endpoint": "/api/v1/my-posts",
+  "method": "GET",
+  "description": "Retrieve all posts created by the authenticated user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 1,
+          "user_id": 8,
+          "content": "My first post",
+          "image": null,
+          "location": null,
+          "likes": 0,
+          "comments": 0,
+          "created_at": "2025-12-29T10:30:00Z"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 1,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Returns only posts created by the authenticated user",
+    "Supports pagination with page and limit parameters",
+    "Posts are returned in reverse chronological order (newest first)",
+    "Use this to show user's own posts in their profile"
+  ]
+}

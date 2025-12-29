@@ -1,0 +1,34 @@
+{
+  "endpoint": "/api/v1/me",
+  "method": "GET",
+  "description": "Retrieve the authenticated user's profile information",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 8,
+      "name": "John Doe",
+      "username": "johndoe",
+      "email": "john@example.com",
+      "avatar": null,
+      "followers": 0,
+      "following": 0
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token in Authorization header",
+    "Returns 401 Unauthorized if token is missing or invalid",
+    "Avatar is null if not set",
+    "Follower and following counts are returned"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "endpoint": "/api/v1/users/{username}/posts",
+  "method": "GET",
+  "description": "Retrieve all public posts from a specific user by username",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "username": "johndoe",
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "user": {
+        "username": "johndoe",
+        "name": "John Doe",
+        "avatar": null
+      },
+      "data": [
+        {
+          "id": 1,
+          "user_id": 8,
+          "content": "User public post",
+          "image": null,
+          "location": null,
+          "likes": 3,
+          "comments": 1,
+          "created_at": "2025-12-29T10:30:00Z"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 1,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "No authentication required",
+    "Returns 404 Not Found if user does not exist",
+    "Only returns posts that are public (respects user privacy settings)",
+    "Includes user profile information with posts",
+    "Supports pagination with page and limit parameters",
+    "Useful for viewing a user's profile and their posts"
+  ]
+}

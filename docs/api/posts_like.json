@@ -1,0 +1,38 @@
+{
+  "endpoint": "/api/v1/posts/{id}/like",
+  "method": "POST",
+  "description": "Like or unlike a post",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "id": 15
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Like added successfully",
+      "data": {
+        "post_id": 15,
+        "liked": true,
+        "total_likes": 6
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Returns 404 Not Found if post does not exist",
+    "Liking the same post twice will unlike it",
+    "Returns the total like count for the post"
+  ]
+}

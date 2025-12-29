@@ -1,0 +1,35 @@
+{
+  "endpoint": "/api/v1/account/privacy",
+  "method": "GET",
+  "description": "Retrieve privacy settings for authenticated user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": {
+        "user_id": 8,
+        "is_private": false,
+        "show_location": true,
+        "allow_messages": true,
+        "show_online_status": true,
+        "allow_notifications": true
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Returns current privacy settings",
+    "Use PUT to update privacy settings"
+  ]
+}

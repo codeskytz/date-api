@@ -1,0 +1,33 @@
+{
+  "endpoint": "/api/v1/auth/login",
+  "method": "POST",
+  "description": "Authenticate an existing user and receive a personal access token",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "email": "john@example.com",
+      "password": "Password123"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Login successful",
+      "token": "9qT2XPu6juLYZGQ1HJt3PdsanO2ugEbGnq4LZSd39IqmFW2bolMjynchYAyl"
+    }
+  },
+  "notes": [
+    "Email and password are required",
+    "Invalid credentials return 401 Unauthorized",
+    "Token is returned in plain format",
+    "Use this token for all authenticated requests"
+  ]
+}

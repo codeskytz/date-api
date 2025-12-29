@@ -1,0 +1,36 @@
+{
+  "endpoint": "/api/v1/users/{id}/match-status",
+  "method": "GET",
+  "description": "Get match status between authenticated user and another user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "id": 5
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": {
+        "user_id": 5,
+        "status": "matched",
+        "matched_at": "2025-12-28T15:30:00Z"
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Status can be: 'matched', 'pending', 'rejected', or 'none'",
+    "Returns 404 Not Found if user does not exist",
+    "matched_at is null if status is not 'matched'"
+  ]
+}

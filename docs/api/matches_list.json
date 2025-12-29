@@ -1,0 +1,47 @@
+{
+  "endpoint": "/api/v1/matches",
+  "method": "GET",
+  "description": "Retrieve list of matched users",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 5,
+          "name": "Jane Smith",
+          "username": "janesmith",
+          "avatar": "https://example.com/jane.jpg",
+          "matched_at": "2025-12-28T15:30:00Z"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 1,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Returns users that have matched with the authenticated user",
+    "Supports pagination",
+    "Includes match timestamp"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "endpoint": "/api/v1/stories/feed",
+  "method": "GET",
+  "description": "Retrieve stories feed from all users",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 8,
+          "user_id": 8,
+          "user": {
+            "id": 8,
+            "name": "John Doe",
+            "username": "johndoe",
+            "avatar": null
+          },
+          "content": "Beautiful sunset!",
+          "image": "https://example.com/sunset.jpg",
+          "views": 3,
+          "expires_at": "2025-12-30T10:45:00Z",
+          "created_at": "2025-12-29T10:45:00Z"
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 1,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "No authentication required",
+    "Only returns non-expired stories",
+    "Supports pagination",
+    "Includes view count for each story"
+  ]
+}

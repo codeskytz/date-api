@@ -1,0 +1,44 @@
+{
+  "endpoint": "/api/v1/posts",
+  "method": "POST",
+  "description": "Create a new post for the authenticated user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "content": "Just finished an amazing hike!",
+      "image": "https://example.com/image.jpg",
+      "location": "Mountain Peak, Colorado"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Post created successfully",
+      "data": {
+        "id": 15,
+        "user_id": 8,
+        "content": "Just finished an amazing hike!",
+        "image": "https://example.com/image.jpg",
+        "location": "Mountain Peak, Colorado",
+        "likes": 0,
+        "comments": 0,
+        "created_at": "2025-12-29T10:30:00Z"
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Content is required, image and location are optional",
+    "Returns 201 Created status on success",
+    "Includes post ID for future reference"
+  ]
+}

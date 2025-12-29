@@ -1,0 +1,41 @@
+{
+  "endpoint": "/api/v1/users/{username}/follow",
+  "method": "POST",
+  "description": "Follow a user by username",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "username": "johndoe"
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "User followed successfully",
+      "data": {
+        "follower_id": 8,
+        "followed_id": 5,
+        "username": "johndoe",
+        "name": "John Doe",
+        "is_following": true
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Cannot follow yourself",
+    "Returns 400 if trying to follow self",
+    "Returns 404 if user does not exist",
+    "Following the same user twice will not create duplicates"
+  ]
+}

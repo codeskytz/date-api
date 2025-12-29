@@ -1,0 +1,44 @@
+{
+  "endpoint": "/api/v1/account/privacy",
+  "method": "POST",
+  "description": "Update privacy settings for authenticated user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "is_private": false,
+      "show_location": true,
+      "allow_messages": true,
+      "show_online_status": true,
+      "allow_notifications": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Privacy settings updated successfully",
+      "data": {
+        "user_id": 8,
+        "is_private": false,
+        "show_location": true,
+        "allow_messages": true,
+        "show_online_status": true,
+        "allow_notifications": true
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "All settings are optional in request",
+    "Only provided settings will be updated",
+    "Returns updated settings on success"
+  ]
+}

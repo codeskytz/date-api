@@ -1,0 +1,47 @@
+{
+  "endpoint": "/api/v1/users/{username}/followers",
+  "method": "GET",
+  "description": "Retrieve list of users following a specific user",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "username": "johndoe",
+      "page": 1,
+      "limit": 20
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "username": "johndoe",
+      "data": [
+        {
+          "id": 8,
+          "name": "Jane Smith",
+          "username": "janesmith",
+          "avatar": null
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 20,
+        "total": 1,
+        "pages": 1
+      }
+    }
+  },
+  "notes": [
+    "No authentication required",
+    "Returns 404 if user does not exist",
+    "Supports pagination with page and limit parameters",
+    "Returns public user information only"
+  ]
+}

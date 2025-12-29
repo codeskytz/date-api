@@ -1,0 +1,44 @@
+{
+  "endpoint": "/api/v1/me",
+  "method": "PUT",
+  "description": "Update the authenticated user's profile information",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "name": "Jane Doe",
+      "avatar": "https://example.com/avatar.jpg",
+      "bio": "A passionate dating app user"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Profile updated successfully",
+      "data": {
+        "id": 8,
+        "name": "Jane Doe",
+        "username": "johndoe",
+        "email": "john@example.com",
+        "avatar": "https://example.com/avatar.jpg",
+        "bio": "A passionate dating app user",
+        "followers": 0,
+        "following": 0
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "All fields are optional",
+    "Username and email cannot be updated via this endpoint",
+    "Returns updated user object on success"
+  ]
+}

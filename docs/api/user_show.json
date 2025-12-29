@@ -1,0 +1,35 @@
+{
+  "endpoint": "/api/v1/users/{username}",
+  "method": "GET",
+  "description": "Retrieve a public user profile by username",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "username": "johndoe"
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 8,
+      "name": "John Doe",
+      "username": "johndoe",
+      "avatar": "https://example.com/avatar.jpg",
+      "followers": 42,
+      "following": 15
+    }
+  },
+  "notes": [
+    "No authentication required",
+    "Returns 404 Not Found if user does not exist",
+    "Only public profile information is returned",
+    "Private information like email is not included"
+  ]
+}

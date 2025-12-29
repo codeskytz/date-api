@@ -1,0 +1,42 @@
+{
+  "endpoint": "/api/v1/posts/{id}/comments",
+  "method": "POST",
+  "description": "Add a comment to a post",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "id": 15
+    },
+    "body": {
+      "content": "This looks amazing! I want to go there too!"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Comment added successfully",
+      "data": {
+        "id": 42,
+        "post_id": 15,
+        "user_id": 8,
+        "content": "This looks amazing! I want to go there too!",
+        "created_at": "2025-12-29T10:35:00Z"
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Content is required and cannot be empty",
+    "Returns 404 Not Found if post does not exist",
+    "Returns 201 Created status on success"
+  ]
+}

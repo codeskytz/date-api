@@ -1,0 +1,38 @@
+{
+  "endpoint": "/api/v1/stories/{id}/view",
+  "method": "POST",
+  "description": "Mark a story as viewed by the authenticated user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "id": 8
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "message": "Story view recorded",
+      "data": {
+        "story_id": 8,
+        "user_id": 8,
+        "total_views": 4
+      }
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Cannot view own stories",
+    "Multiple views from same user count only once",
+    "Returns updated view count"
+  ]
+}

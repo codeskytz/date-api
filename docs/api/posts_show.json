@@ -1,0 +1,47 @@
+{
+  "endpoint": "/api/v1/posts/{id}",
+  "method": "GET",
+  "description": "Retrieve detailed information about a specific post",
+  "authentication": false,
+  "request": {
+    "headers": {
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "id": 15
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "data": {
+        "id": 15,
+        "user_id": 8,
+        "user": {
+          "id": 8,
+          "name": "John Doe",
+          "username": "johndoe",
+          "avatar": null
+        },
+        "content": "Sample post content",
+        "image": null,
+        "location": null,
+        "likes": 5,
+        "comments": 2,
+        "created_at": "2025-12-29T10:30:00Z"
+      }
+    }
+  },
+  "notes": [
+    "No authentication required",
+    "Returns 404 Not Found if post does not exist",
+    "Includes complete user information for the post author",
+    "Shows current like and comment counts",
+    "Useful for viewing post details in a dedicated page"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "endpoint": "/api/v1/users/{username}/is-following",
+  "method": "GET",
+  "description": "Check if authenticated user is following another user",
+  "authentication": true,
+  "request": {
+    "headers": {
+      "Authorization": "Bearer {token}",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "username": "johndoe"
+    },
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "success",
+      "username": "johndoe",
+      "is_following": true
+    }
+  },
+  "notes": [
+    "Requires valid Bearer token",
+    "Returns 404 if user does not exist",
+    "Returns boolean is_following status",
+    "Useful for UI to show follow/unfollow button state"
+  ]
+}
