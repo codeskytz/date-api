@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\Admin\AdminController;
 
 Route::prefix('v1')->group(function () {
@@ -29,6 +30,13 @@ Route::prefix('v1')->group(function () {
         Route::post('media/story', [MediaController::class, 'uploadStory']);
         Route::post('media/story-video', [MediaController::class, 'uploadStoryVideo']);
         Route::post('media/delete', [MediaController::class, 'deleteFile']);
+    });
+
+    // Verification Endpoints (Protected)
+    Route::middleware('auth.token')->group(function () {
+        Route::post('verification/request', [VerificationController::class, 'request']);
+        Route::get('verification/status', [VerificationController::class, 'status']);
+        Route::delete('verification/cancel', [VerificationController::class, 'cancel']);
     });
 
     // OTP Verification
@@ -120,10 +128,26 @@ Route::prefix('v1')->group(function () {
         Route::post('posts/{id}/flag', [AdminController::class, 'flagPost']);
         Route::post('posts/{id}/unflag', [AdminController::class, 'unflagPost']);
 
+        // Discover
+        Route::get('discover/users', [DiscoverController::class, 'users']);
+        Route::get('discover/nearby', [DiscoverController::class, 'nearby']);
+
+        // Conversations
+        Route::get('conversations', [ConversationController::class, 'index']);
+        
         // Content Moderation
         Route::get('flagged-content', [AdminController::class, 'getFlaggedContent']);
 
         // Activity Log
         Route::get('activity-log', [AdminController::class, 'getActivityLog']);
+
+        // Verification Management
+        Route::get('verification/pending', [AdminController::class, 'listPendingVerifications']);
+        Route::get('verification/approved', [AdminController::class, 'listApprovedVerifications']);
+        Route::get('verification/rejected', [AdminController::class, 'listRejectedVerifications']);
+        Route::get('verification/all', [AdminController::class, 'listAllVerifications']);
+        Route::get('verification/{id}', [AdminController::class, 'getVerificationDetails']);
+        Route::post('verification/{id}/approve', [AdminController::class, 'approveVerification']);
+        Route::post('verification/{id}/reject', [AdminController::class, 'rejectVerification']);
     });
 });

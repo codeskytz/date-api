@@ -1,0 +1,39 @@
+{
+  "endpoint": "/api/v1/admin/verification/approved",
+  "method": "GET",
+  "description": "List all approved verification requests. Shows users who have been verified with their documents.",
+  "request": {
+    "query_params": {
+      "page": 1,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": "success",
+    "data": [
+      {
+        "id": 1,
+        "request_id": 1,
+        "user": {
+          "id": 1,
+          "username": "testuser",
+          "name": "Test User",
+          "email": "test@example.com"
+        },
+        "type": "identity",
+        "submitted_at": "2025-12-30T12:07:56Z",
+        "reviewed_at": "2025-12-30T12:09:13Z",
+        "status": "approved",
+        "document_front": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-xyz.png",
+        "document_back": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-abc.png",
+        "selfie": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-123.png"
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 20,
+      "pages": 1
+    }
+  }
+}

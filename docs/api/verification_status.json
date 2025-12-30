@@ -1,0 +1,14 @@
+{
+  "endpoint": "/api/v1/verification/status",
+  "method": "GET",
+  "description": "Get the current verification status of the authenticated user. Returns pending, approved, or rejected status with details.",
+  "request": {},
+  "response": {
+    "verified": false,
+    "status": "pending",
+    "type": "identity",
+    "submitted_at": "2025-12-30T12:07:56.000000Z",
+    "reviewed_at": null,
+    "rejection_reason": null
+  }
+}

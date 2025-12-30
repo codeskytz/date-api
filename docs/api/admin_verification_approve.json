@@ -1,0 +1,14 @@
+{
+  "endpoint": "/api/v1/admin/verification/{id}/approve",
+  "method": "POST",
+  "description": "Approve a verification request and grant the user a verified badge. Sets user.verified=true and adds verified_type badge.",
+  "request": {},
+  "response": {
+    "status": "success",
+    "message": "Verification approved successfully",
+    "data": {
+      "status": "approved",
+      "verified_at": "2025-12-30T12:09:14Z"
+    }
+  }
+}

@@ -92,6 +92,11 @@ class User extends Authenticatable
         return $this->hasMany(Story::class);
     }
 
+    public function verificationRequests()
+    {
+        return $this->hasMany(VerificationRequest::class);
+    }
+
     public function followers()
     {
         return $this->belongsToMany(

@@ -262,4 +262,54 @@ class MediaStorageService
     {
         return self::VIDEO_EXTENSIONS;
     }
+
+    /**
+     * Store verification documents (in private bucket)
+     * Expects base64 encoded data URLs
+     */
+    public function storeVerificationDocument(string $dataUrl, string $folder = 'verification'): string
+    {
+        try {
+            // Parse data URL: data:image/jpeg;base64,/9j/4AAQSkZ...
+            if (preg_match('/^data:([^;]+);base64,(.+)$/', $dataUrl, $matches)) {
+                $mimeType = $matches[1];
+                $data = base64_decode($matches[2]);
+            } else {
+                throw new \Exception('Invalid data URL format');
+            }
+
+            // Determine file extension from mime type
+            $ext = $this->getExtensionFromMimeType($mimeType);
+            if (!$ext) {
+                throw new \Exception('Unsupported file type: ' . $mimeType);
+            }
+
+            // Generate unique filename
+            $filename = 'doc-' . Str::random(16) . '.' . $ext;
+            $path = $folder . '/' . date('Y/m/d') . '/' . $filename;
+
+            // Store in private bucket
+            Storage::disk('s3-private')->put($path, $data, 'private');
+
+            return Storage::disk('s3-private')->url($path);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to store verification document: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get file extension from mime type
+     */
+    private function getExtensionFromMimeType(string $mimeType): ?string
+    {
+        $mimeMap = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/webp' => 'webp',
+            'application/pdf' => 'pdf',
+        ];
+
+        return $mimeMap[$mimeType] ?? null;
+    }
 }

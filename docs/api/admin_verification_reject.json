@@ -1,0 +1,16 @@
+{
+  "endpoint": "/api/v1/admin/verification/{id}/reject",
+  "method": "POST",
+  "description": "Reject a verification request and provide a reason. The user will see the rejection reason and can resubmit.",
+  "request": {
+    "reason": "Document not clear enough, please resubmit with higher quality images"
+  },
+  "response": {
+    "status": "success",
+    "message": "Verification rejected successfully",
+    "data": {
+      "status": "rejected",
+      "reason": "Document not clear enough, please resubmit with higher quality images"
+    }
+  }
+}

@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 import UserManagement from './UserManagement';
 import PostManagement from './PostManagement';
 import FlaggedContent from './FlaggedContent';
+import VerificationManagement from './VerificationManagement';
 import ActivityLog from './ActivityLog';
 import Settings from './Settings';
 
@@ -23,6 +24,8 @@ export default function AdminDashboard() {
         return <PostManagement />;
       case 'flagged':
         return <FlaggedContent />;
+      case 'verification':
+        return <VerificationManagement />;
       case 'activity':
         return <ActivityLog />;
       case 'settings':
@@ -38,6 +41,7 @@ export default function AdminDashboard() {
       users: 'User Management',
       posts: 'Post Management',
       flagged: 'Flagged Content',
+      verification: 'Profile Verification',
       activity: 'Activity Log',
       settings: 'Settings',
     };

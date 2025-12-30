@@ -18,6 +18,14 @@ POST /account/privacy
 Verification APIs
 POST /verification/request
 GET /verification/status
+DELETE /verification/cancel
+GET /admin/verification/pending
+GET /admin/verification/approved
+GET /admin/verification/rejected
+GET /admin/verification/all
+GET /admin/verification/{id}
+POST /admin/verification/{id}/approve
+POST /admin/verification/{id}/reject
 Admin approval and rejection endpoints
 Post APIs
 POST /posts
@@ -51,6 +59,15 @@ POST /api/admin/auth/login
 GET /api/admin/dashboard
 GET /api/admin/users
 POST /api/admin/users/{id}/ban
+GET /api/admin/verification/pending
+GET /api/admin/verification/approved
+GET /api/admin/verification/rejected
+GET /api/admin/verification/all
+GET /api/admin/verification/{id}
+POST /api/admin/verification/{id}/approve
+POST /api/admin/verification/{id}/reject
+POST /api/admin/verification/{id}/approve
+POST /api/admin/verification/{id}/reject
 System APIs
 GET /health
 Database Schema
@@ -596,6 +613,24 @@ Redis → sessions, cache, rate limits
 CDN → all story media
 
 🔵 VERIFIED PROFILE (BLUE TICK) SYSTEM
+
+📋 COMPLETE ENDPOINT REFERENCE (10 Total)
+
+User-Side Verification Endpoints (3):
+─────────────────────────────────────
+1. POST   /api/v1/verification/request        → Submit verification with documents
+2. GET    /api/v1/verification/status         → Check current verification status
+3. DELETE /api/v1/verification/cancel         → Cancel pending verification
+
+Admin-Side Verification Endpoints (7):
+──────────────────────────────────────
+4. GET    /api/v1/admin/verification/pending   → List requests awaiting review
+5. GET    /api/v1/admin/verification/approved  → View all approved verifications
+6. GET    /api/v1/admin/verification/rejected  → View all rejected requests
+7. GET    /api/v1/admin/verification/all       → Complete verification history
+8. GET    /api/v1/admin/verification/{id}      → View request details & documents
+9. POST   /api/v1/admin/verification/{id}/approve  → Approve & set verified badge
+10. POST  /api/v1/admin/verification/{id}/reject   → Reject with reason
 🎯 Verification Types
 
 You can support multiple verification levels:
@@ -651,7 +686,7 @@ DELETE /api/verification/cancel
   "status": "cancelled"
 }
 
-🛡️ ADMIN-SIDE ENDPOINTS (REVIEW)
+🛡️ ADMIN-SIDE ENDPOINTS (REVIEW & HISTORY)
 
 Base:
 
@@ -661,7 +696,13 @@ Base:
 
 GET /api/admin/verification/pending
 
+Query Parameters:
+- page (optional, default: 1)
+- limit (optional, default: 20)
+
+Response
 {
+  "status": "success",
   "data": [
     {
       "request_id": 12,
@@ -670,9 +711,136 @@ GET /api/admin/verification/pending
         "username": "johndoe"
       },
       "type": "identity",
-      "submitted_at": "2025-12-28T15:20:00Z"
+      "submitted_at": "2025-12-28T15:20:00Z",
+      "status": "pending"
     }
-  ]
+  ],
+  "pagination": {
+    "total": 5,
+    "page": 1,
+    "limit": 20,
+    "pages": 1
+  }
+}
+
+4️⃣ List Approved Verifications (PROCESSED)
+
+GET /api/admin/verification/approved
+
+Query Parameters:
+- page (optional, default: 1)
+- limit (optional, default: 20)
+
+Response
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "request_id": 1,
+      "user": {
+        "id": 1,
+        "username": "testuser",
+        "name": "Test User",
+        "email": "test@example.com"
+      },
+      "type": "identity",
+      "submitted_at": "2025-12-30T12:07:56Z",
+      "reviewed_at": "2025-12-30T12:09:13Z",
+      "status": "approved"
+    }
+  ],
+  "pagination": {
+    "total": 1,
+    "page": 1,
+    "limit": 20,
+    "pages": 1
+  }
+}
+
+4️⃣ List Rejected Verifications (PROCESSED)
+
+GET /api/admin/verification/rejected
+
+Query Parameters:
+- page (optional, default: 1)
+- limit (optional, default: 20)
+
+Response
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 2,
+      "request_id": 2,
+      "user": {
+        "id": 1,
+        "username": "testuser",
+        "name": "Test User",
+        "email": "test@example.com"
+      },
+      "type": "business",
+      "submitted_at": "2025-12-30T12:09:28Z",
+      "reviewed_at": "2025-12-30T12:09:38Z",
+      "rejection_reason": "Document not clear enough, please resubmit with higher quality images",
+      "status": "rejected"
+    }
+  ],
+  "pagination": {
+    "total": 1,
+    "page": 1,
+    "limit": 20,
+    "pages": 1
+  }
+}
+
+4️⃣ View All Verification History
+
+GET /api/admin/verification/all
+
+Query Parameters:
+- page (optional, default: 1)
+- limit (optional, default: 20)
+
+Response
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "request_id": 1,
+      "user": { ... },
+      "type": "identity",
+      "submitted_at": "2025-12-30T12:07:56Z",
+      "reviewed_at": "2025-12-30T12:09:13Z",
+      "status": "approved"
+    },
+    {
+      "id": 2,
+      "request_id": 2,
+      "user": { ... },
+      "type": "business",
+      "submitted_at": "2025-12-30T12:09:28Z",
+      "reviewed_at": "2025-12-30T12:09:38Z",
+      "rejection_reason": "...",
+      "status": "rejected"
+    },
+    {
+      "id": 3,
+      "request_id": 3,
+      "user": { ... },
+      "type": "creator",
+      "submitted_at": "2025-12-30T12:10:00Z",
+      "reviewed_at": null,
+      "status": "pending"
+    }
+  ],
+  "pagination": {
+    "total": 3,
+    "page": 1,
+    "limit": 20,
+    "pages": 1
+  }
 }
 
 5️⃣ View Verification Details

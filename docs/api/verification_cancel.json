@@ -1,0 +1,10 @@
+{
+  "endpoint": "/api/v1/verification/cancel",
+  "method": "DELETE",
+  "description": "Cancel a pending verification request. Removes all uploaded documents and resets verification status. Only works for pending requests.",
+  "request": {},
+  "response": {
+    "status": "cancelled",
+    "message": "Verification request cancelled successfully"
+  }
+}

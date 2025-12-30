@@ -1,0 +1,51 @@
+{
+  "endpoint": "/api/v1/admin/verification/all",
+  "method": "GET",
+  "description": "View complete verification history - all pending, approved, and rejected requests. Provides audit trail of all verification activities.",
+  "request": {
+    "query_params": {
+      "page": 1,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": "success",
+    "data": [
+      {
+        "id": 1,
+        "request_id": 1,
+        "user": {
+          "id": 1,
+          "username": "testuser",
+          "name": "Test User",
+          "email": "test@example.com"
+        },
+        "type": "identity",
+        "submitted_at": "2025-12-30T12:07:56Z",
+        "reviewed_at": "2025-12-30T12:09:13Z",
+        "status": "approved"
+      },
+      {
+        "id": 2,
+        "request_id": 2,
+        "user": {
+          "id": 1,
+          "username": "testuser",
+          "name": "Test User",
+          "email": "test@example.com"
+        },
+        "type": "business",
+        "submitted_at": "2025-12-30T12:09:28Z",
+        "reviewed_at": "2025-12-30T12:09:38Z",
+        "rejection_reason": "Document not clear",
+        "status": "rejected"
+      }
+    ],
+    "pagination": {
+      "total": 2,
+      "page": 1,
+      "limit": 20,
+      "pages": 1
+    }
+  }
+}

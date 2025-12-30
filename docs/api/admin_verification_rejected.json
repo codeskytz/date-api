@@ -1,0 +1,37 @@
+{
+  "endpoint": "/api/v1/admin/verification/rejected",
+  "method": "GET",
+  "description": "List all rejected verification requests. Shows users whose verification was rejected and the rejection reason.",
+  "request": {
+    "query_params": {
+      "page": 1,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": "success",
+    "data": [
+      {
+        "id": 2,
+        "request_id": 2,
+        "user": {
+          "id": 1,
+          "username": "testuser",
+          "name": "Test User",
+          "email": "test@example.com"
+        },
+        "type": "business",
+        "submitted_at": "2025-12-30T12:09:28Z",
+        "reviewed_at": "2025-12-30T12:09:38Z",
+        "rejection_reason": "Document not clear enough, please resubmit with higher quality images",
+        "status": "rejected"
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 20,
+      "pages": 1
+    }
+  }
+}

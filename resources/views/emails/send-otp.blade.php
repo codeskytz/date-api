@@ -32,7 +32,7 @@
             </p>
             <p style="color: #999; font-size: 12px; margin: 10px 0 0 0;">
                 Best regards,<br>
-                <strong>Date API Team</strong>
+                <strong>Craftrly  Team</strong>
             </p>
         </div>
     </div>

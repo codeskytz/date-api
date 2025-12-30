@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\ApiToken;
 use App\Models\Setting;
+use App\Models\VerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -471,6 +472,258 @@ class AdminController extends Controller
                 'page' => $page,
                 'limit' => $perPage,
                 'pages' => $users->lastPage()
+            ]
+        ]);
+    }
+
+    // Verification Management
+    public function listPendingVerifications(Request $request)
+    {
+        $perPage = $request->query('limit', 20);
+        $page = $request->query('page', 1);
+
+        $requests = VerificationRequest::where('status', 'pending')
+            ->with('user:id,username,name,email')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => collect($requests->items())->map(function ($req) {
+                return [
+                    'request_id' => $req->id,
+                    'user' => [
+                        'id' => $req->user->id,
+                        'username' => $req->user->username,
+                        'name' => $req->user->name,
+                        'email' => $req->user->email,
+                    ],
+                    'type' => $req->type,
+                    'submitted_at' => $req->created_at,
+                ];
+            })->all(),
+            'pagination' => [
+                'total' => $requests->total(),
+                'page' => $page,
+                'limit' => $perPage,
+                'pages' => $requests->lastPage()
+            ]
+        ]);
+    }
+
+    public function getVerificationDetails($id)
+    {
+        $verificationRequest = VerificationRequest::findOrFail($id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'request_id' => $verificationRequest->id,
+                'user' => [
+                    'id' => $verificationRequest->user->id,
+                    'username' => $verificationRequest->user->username,
+                    'name' => $verificationRequest->user->name,
+                ],
+                'type' => $verificationRequest->type,
+                'full_name' => $verificationRequest->full_name,
+                'document_type' => $verificationRequest->document_type,
+                'documents' => [
+                    'front' => $verificationRequest->document_front,
+                    'back' => $verificationRequest->document_back,
+                    'selfie' => $verificationRequest->selfie,
+                ],
+                'note' => $verificationRequest->note,
+                'status' => $verificationRequest->status,
+                'submitted_at' => $verificationRequest->created_at,
+                'reviewed_at' => $verificationRequest->reviewed_at,
+            ]
+        ]);
+    }
+
+    public function approveVerification(Request $request, $id)
+    {
+        try {
+            $verificationRequest = VerificationRequest::findOrFail($id);
+            $admin = User::where('email', 'admin@dateapi.com')->first();
+
+            // Update user verification status
+            $verificationRequest->user->update([
+                'verified' => true,
+                'verified_type' => $verificationRequest->type,
+                'verified_at' => now(),
+            ]);
+
+            // Update verification request
+            $verificationRequest->update([
+                'status' => 'approved',
+                'reviewed_by' => $admin?->id,
+                'reviewed_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Verification approved successfully',
+                'data' => [
+                    'status' => 'approved',
+                    'verified_at' => now(),
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to approve verification: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function rejectVerification(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'reason' => 'required|string|max:500',
+            ]);
+
+            $verificationRequest = VerificationRequest::findOrFail($id);
+            $admin = User::where('email', 'admin@dateapi.com')->first();
+
+            // Update verification request
+            $verificationRequest->update([
+                'status' => 'rejected',
+                'rejection_reason' => $validated['reason'],
+                'reviewed_by' => $admin?->id,
+                'reviewed_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Verification rejected successfully',
+                'data' => [
+                    'status' => 'rejected',
+                    'reason' => $validated['reason'],
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to reject verification: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Get approved verifications
+    public function listApprovedVerifications(Request $request)
+    {
+        $perPage = $request->query('limit', 20);
+        $page = $request->query('page', 1);
+
+        $requests = VerificationRequest::where('status', 'approved')
+            ->with('user:id,username,name,email')
+            ->orderBy('reviewed_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => collect($requests->items())->map(function ($req) {
+                return [
+                    'id' => $req->id,
+                    'request_id' => $req->id,
+                    'user' => [
+                        'id' => $req->user->id,
+                        'username' => $req->user->username,
+                        'name' => $req->user->name,
+                        'email' => $req->user->email,
+                    ],
+                    'type' => $req->type,
+                    'submitted_at' => $req->created_at,
+                    'reviewed_at' => $req->reviewed_at,
+                    'status' => $req->status,
+                    'document_front' => $req->document_front,
+                    'document_back' => $req->document_back,
+                    'selfie' => $req->selfie,
+                ];
+            })->all(),
+            'pagination' => [
+                'total' => $requests->total(),
+                'page' => $page,
+                'limit' => $perPage,
+                'pages' => $requests->lastPage()
+            ]
+        ]);
+    }
+
+    // Get rejected verifications
+    public function listRejectedVerifications(Request $request)
+    {
+        $perPage = $request->query('limit', 20);
+        $page = $request->query('page', 1);
+
+        $requests = VerificationRequest::where('status', 'rejected')
+            ->with('user:id,username,name,email')
+            ->orderBy('reviewed_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => collect($requests->items())->map(function ($req) {
+                return [
+                    'id' => $req->id,
+                    'request_id' => $req->id,
+                    'user' => [
+                        'id' => $req->user->id,
+                        'username' => $req->user->username,
+                        'name' => $req->user->name,
+                        'email' => $req->user->email,
+                    ],
+                    'type' => $req->type,
+                    'submitted_at' => $req->created_at,
+                    'reviewed_at' => $req->reviewed_at,
+                    'rejection_reason' => $req->rejection_reason,
+                    'status' => $req->status,
+                ];
+            })->all(),
+            'pagination' => [
+                'total' => $requests->total(),
+                'page' => $page,
+                'limit' => $perPage,
+                'pages' => $requests->lastPage()
+            ]
+        ]);
+    }
+
+    // Get all verifications (history)
+    public function listAllVerifications(Request $request)
+    {
+        $perPage = $request->query('limit', 20);
+        $page = $request->query('page', 1);
+
+        $requests = VerificationRequest::with('user:id,username,name,email')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => collect($requests->items())->map(function ($req) {
+                return [
+                    'id' => $req->id,
+                    'request_id' => $req->id,
+                    'user' => [
+                        'id' => $req->user->id,
+                        'username' => $req->user->username,
+                        'name' => $req->user->name,
+                        'email' => $req->user->email,
+                    ],
+                    'type' => $req->type,
+                    'submitted_at' => $req->created_at,
+                    'reviewed_at' => $req->reviewed_at,
+                    'rejection_reason' => $req->rejection_reason,
+                    'status' => $req->status,
+                ];
+            })->all(),
+            'pagination' => [
+                'total' => $requests->total(),
+                'page' => $page,
+                'limit' => $perPage,
+                'pages' => $requests->lastPage()
             ]
         ]);
     }

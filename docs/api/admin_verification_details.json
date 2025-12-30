@@ -1,0 +1,33 @@
+{
+  "endpoint": "/api/v1/admin/verification/{id}",
+  "method": "GET",
+  "description": "Get detailed information about a specific verification request including user info, documents, and review status.",
+  "request": {
+    "path_params": {
+      "id": 1
+    }
+  },
+  "response": {
+    "status": "success",
+    "data": {
+      "request_id": 1,
+      "user": {
+        "id": 1,
+        "username": "testuser",
+        "name": "Test User"
+      },
+      "type": "identity",
+      "full_name": "John Michael Doe",
+      "document_type": "passport",
+      "documents": {
+        "front": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-front.png",
+        "back": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-back.png",
+        "selfie": "https://s3.wasabisys.com/craftrly/identity-verification/2025/12/30/doc-selfie.png"
+      },
+      "note": "Public speaker and tech blogger",
+      "status": "pending",
+      "submitted_at": "2025-12-30T12:07:56Z",
+      "reviewed_at": null
+    }
+  }
+}

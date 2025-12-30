@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   Clock,
   Settings,
+  CheckCircle,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -19,6 +20,7 @@ const tabs = [
   { id: 'users', label: 'Users', icon: Users },
   { id: 'posts', label: 'Posts', icon: FileText },
   { id: 'flagged', label: 'Flagged Content', icon: AlertTriangle },
+  { id: 'verification', label: 'Verifications', icon: CheckCircle },
   { id: 'activity', label: 'Activity Log', icon: Clock },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];

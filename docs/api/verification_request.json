@@ -1,0 +1,19 @@
+{
+  "endpoint": "/api/v1/verification/request",
+  "method": "POST",
+  "description": "Submit a verification request with identity documents. User must provide documents (front, back, selfie) as base64 data URLs.",
+  "request": {
+    "type": "identity",
+    "full_name": "John Michael Doe",
+    "document_type": "passport",
+    "document_front": "data:image/png;base64,iVBORw0KGgoAAAANS...",
+    "document_back": "data:image/png;base64,iVBORw0KGgoAAAANS...",
+    "selfie": "data:image/png;base64,iVBORw0KGgoAAAANS...",
+    "note": "Public speaker and tech blogger"
+  },
+  "response": {
+    "status": "submitted",
+    "message": "Verification request submitted successfully",
+    "request_id": 1
+  }
+}

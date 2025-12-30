@@ -420,7 +420,7 @@
         <!-- Header -->
         <header class="header">
             <h1><i class="fas fa-book"></i> date-api — API Documentation</h1>
-            <p>Complete API reference with endpoint samples, request/response examples, and implementation status.</p>
+            <p>Complete API reference with endpoint samples, request/response examples, by <strong>SIRTHEPROGRAMMER.</strong></p>
             
             <div class="api-info">
                 <div class="info-item">
