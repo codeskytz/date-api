@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\ApiToken;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -178,21 +179,31 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     {
-        $user = User::findOrFail($id);
+        try {
+            $user = User::findOrFail($id);
 
-        // Delete user's posts first
-        $user->posts()->delete();
+            // Delete user's posts first
+            $user->posts()->delete();
 
-        // Delete user's API tokens
-        $user->apiTokens()->delete();
+            // Delete user's stories
+            $user->stories()->delete();
 
-        // Delete user
-        $user->delete();
+            // Delete user's API tokens
+            $user->tokens()->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User deleted successfully'
-        ]);
+            // Delete user (this will trigger the deleting event)
+            $user->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete user: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function updateUser($id, Request $request)
@@ -383,15 +394,52 @@ class AdminController extends Controller
     // System Management
     public function getSystemSettings()
     {
+        $appName = Setting::get('app_name', config('app.name'));
+        $appUrl = Setting::get('app_url', config('app.url'));
+
         return response()->json([
             'status' => 'success',
             'data' => [
-                'app_name' => config('app.name'),
+                'app_name' => $appName,
                 'app_env' => config('app.env'),
                 'app_debug' => config('app.debug'),
-                'app_url' => config('app.url'),
+                'app_url' => $appUrl,
             ]
         ]);
+    }
+
+    public function updateSystemSettings(Request $request)
+    {
+        try {
+            // Only allow updating specific settings, ignore extra fields
+            $allowedSettings = ['app_name', 'app_url'];
+            $data = $request->only($allowedSettings);
+
+            // Save each setting to database
+            foreach ($data as $key => $value) {
+                Setting::set($key, $value);
+            }
+
+            // Return updated settings
+            $appName = Setting::get('app_name', config('app.name'));
+            $appUrl = Setting::get('app_url', config('app.url'));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Settings updated successfully',
+                'data' => [
+                    'app_name' => $appName,
+                    'app_env' => config('app.env'),
+                    'app_debug' => config('app.debug'),
+                    'app_url' => $appUrl,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update settings: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getActivityLog(Request $request)

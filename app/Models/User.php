@@ -65,10 +65,15 @@ class User extends Authenticatable
 
         // Delete avatar and cover when user is deleted
         static::deleting(function ($user) {
-            if ($user->avatar) {
-                app(MediaStorageService::class)->deleteAvatar($user->id);
+            try {
+                if ($user->avatar) {
+                    app(MediaStorageService::class)->deleteAvatar($user->id);
+                }
+                app(MediaStorageService::class)->deleteCoverImage($user->id);
+            } catch (\Exception $e) {
+                // Log the error but don't fail the deletion
+                \Illuminate\Support\Facades\Log::error('Failed to delete user media: ' . $e->getMessage());
             }
-            app(MediaStorageService::class)->deleteCoverImage($user->id);
         });
     }
 

@@ -103,6 +103,7 @@ Route::prefix('v1')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard']);
         Route::get('statistics', [AdminController::class, 'getStatistics']);
         Route::get('settings', [AdminController::class, 'getSystemSettings']);
+        Route::put('settings', [AdminController::class, 'updateSystemSettings']);
 
         // User Management
         Route::get('users', [AdminController::class, 'listUsers']);
