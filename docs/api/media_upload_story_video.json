@@ -1,0 +1,54 @@
+{
+  "title": "Upload Story Video",
+  "method": "POST",
+  "endpoint": "/api/v1/media/story-video",
+  "auth": true,
+  "description": "Upload a video file for a story with automatic expiration (supports MP4, WebM, MOV, AVI, MKV)",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "video": "file (max 100MB, video format only)",
+      "caption": "string (optional, max 500 characters)",
+      "duration": "integer (optional, minutes until expiration, default 1440 - 24 hours)"
+    },
+    "supportedFormats": ["mp4", "webm", "mov", "avi", "mkv"]
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Video story created successfully",
+      "data": {
+        "id": 1,
+        "url": "https://s3.us-central-1.wasabisys.com/craftrly/video-stories/1/video_xyz123.mp4",
+        "media_type": "video",
+        "expires_at": "2024-12-31T18:25:00Z",
+        "size": 52428800
+      }
+    }
+  },
+  "errors": {
+    "422": {
+      "status": "error",
+      "message": "Validation failed",
+      "errors": {
+        "video": ["The video must be a video file"]
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 100MB",
+    "Allowed formats: MP4, WebM, MOV, AVI, MKV",
+    "Default expiration: 24 hours (1440 minutes)",
+    "Minimum expiration: 5 minutes",
+    "Maximum expiration: 30 days (43200 minutes)",
+    "Media type automatically set to 'video'",
+    "Video duration is stored when available",
+    "Videos stored in video-stories/{user_id}/{random_name}",
+    "Recommended to use MP4 for maximum compatibility",
+    "Expired stories marked as is_deleted (not auto-deleted)"
+  ]
+}

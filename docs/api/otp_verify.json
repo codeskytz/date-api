@@ -1,0 +1,60 @@
+{
+  "name": "Verify OTP",
+  "description": "Verify the One-Time Password sent to an email address",
+  "method": "POST",
+  "endpoint": "/api/v1/otp/verify",
+  "authentication": "None (Public)",
+  "parameters": {
+    "body": [
+      {
+        "name": "email",
+        "type": "string",
+        "description": "The email address to verify",
+        "example": "user@example.com",
+        "required": true
+      },
+      {
+        "name": "otp",
+        "type": "string",
+        "description": "The 6-digit OTP code",
+        "example": "123456",
+        "required": true
+      }
+    ]
+  },
+  "request": {
+    "description": "Verify OTP code",
+    "example": {
+      "email": "user@example.com",
+      "otp": "123456"
+    }
+  },
+  "response": {
+    "description": "Returns success message when OTP is verified",
+    "example": {
+      "status": "success",
+      "message": "OTP verified successfully",
+      "email": "user@example.com",
+      "verified": true
+    }
+  },
+  "status_codes": {
+    "200": "OTP verified successfully",
+    "400": "Invalid OTP or maximum attempts exceeded",
+    "404": "OTP not found for this email",
+    "410": "OTP has expired",
+    "422": "Validation error",
+    "429": "Maximum verification attempts exceeded"
+  },
+  "examples": {
+    "curl": "curl -X POST http://localhost:8000/api/v1/otp/verify \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"email\":\"user@example.com\",\"otp\":\"123456\"}'",
+    "javascript": "fetch('http://localhost:8000/api/v1/otp/verify', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    email: 'user@example.com',\n    otp: '123456'\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+    "python": "import requests\n\nresponse = requests.post(\n    'http://localhost:8000/api/v1/otp/verify',\n    json={\n        'email': 'user@example.com',\n        'otp': '123456'\n    }\n)\n\nprint(response.json())"
+  },
+  "notes": [
+    "Maximum 5 verification attempts allowed",
+    "Invalid OTP increments the attempt counter",
+    "After 5 failed attempts, OTP is deleted and a new one must be requested",
+    "OTP expires after 10 minutes"
+  ]
+}

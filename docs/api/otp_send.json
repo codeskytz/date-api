@@ -1,0 +1,48 @@
+{
+  "name": "Send OTP",
+  "description": "Send a One-Time Password (OTP) to the specified email address via Gmail SMTP",
+  "method": "POST",
+  "endpoint": "/api/v1/otp/send",
+  "authentication": "None (Public)",
+  "parameters": {
+    "body": [
+      {
+        "name": "email",
+        "type": "string",
+        "description": "The email address to send OTP to",
+        "example": "user@example.com",
+        "required": true
+      }
+    ]
+  },
+  "request": {
+    "description": "Send OTP to email",
+    "example": {
+      "email": "user@example.com"
+    }
+  },
+  "response": {
+    "description": "Returns success message with email and expiry time",
+    "example": {
+      "status": "success",
+      "message": "OTP sent successfully to your email",
+      "email": "user@example.com",
+      "expires_in": "10 minutes"
+    }
+  },
+  "status_codes": {
+    "200": "OTP sent successfully",
+    "422": "Validation error - invalid email format",
+    "500": "SMTP server error"
+  },
+  "examples": {
+    "curl": "curl -X POST http://localhost:8000/api/v1/otp/send \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"email\":\"user@example.com\"}'",
+    "javascript": "fetch('http://localhost:8000/api/v1/otp/send', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    email: 'user@example.com'\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+    "python": "import requests\n\nresponse = requests.post(\n    'http://localhost:8000/api/v1/otp/send',\n    json={'email': 'user@example.com'}\n)\n\nprint(response.json())"
+  },
+  "notes": [
+    "OTP is 6 digits and valid for 10 minutes",
+    "Each request generates a new OTP and deletes the previous one",
+    "OTP is sent via Gmail SMTP server"
+  ]
+}

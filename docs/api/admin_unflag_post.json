@@ -1,0 +1,27 @@
+{
+  "title": "Unflag Post",
+  "method": "POST",
+  "endpoint": "/api/v1/admin/posts/{id}/unflag",
+  "auth": true,
+  "description": "Remove flag from a post after review",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "parameters": {
+      "id": "Post ID (required)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Post unflagged successfully",
+      "data": {
+        "id": 1,
+        "is_flagged": false,
+        "flag_reason": null
+      }
+    }
+  }
+}

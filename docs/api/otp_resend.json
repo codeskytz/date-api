@@ -1,0 +1,50 @@
+{
+  "name": "Resend OTP",
+  "description": "Request a new OTP code if the previous one expired or was not received",
+  "method": "POST",
+  "endpoint": "/api/v1/otp/resend",
+  "authentication": "None (Public)",
+  "parameters": {
+    "body": [
+      {
+        "name": "email",
+        "type": "string",
+        "description": "The email address to resend OTP to",
+        "example": "user@example.com",
+        "required": true
+      }
+    ]
+  },
+  "request": {
+    "description": "Request a new OTP",
+    "example": {
+      "email": "user@example.com"
+    }
+  },
+  "response": {
+    "description": "Returns success message with new OTP sent",
+    "example": {
+      "status": "success",
+      "message": "New OTP sent successfully",
+      "email": "user@example.com",
+      "expires_in": "10 minutes"
+    }
+  },
+  "status_codes": {
+    "200": "New OTP sent successfully",
+    "422": "Validation error",
+    "429": "Too many requests - please wait before requesting new OTP",
+    "500": "SMTP server error"
+  },
+  "examples": {
+    "curl": "curl -X POST http://localhost:8000/api/v1/otp/resend \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"email\":\"user@example.com\"}'",
+    "javascript": "fetch('http://localhost:8000/api/v1/otp/resend', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    email: 'user@example.com'\n  })\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+    "python": "import requests\n\nresponse = requests.post(\n    'http://localhost:8000/api/v1/otp/resend',\n    json={'email': 'user@example.com'}\n)\n\nprint(response.json())"
+  },
+  "notes": [
+    "Can only resend if the previous OTP has expired",
+    "If OTP is still valid, you must wait for it to expire before requesting a new one",
+    "New OTP is valid for 10 minutes",
+    "Previous OTP record is deleted when requesting a new one"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "title": "Delete Media File",
+  "method": "POST",
+  "endpoint": "/api/v1/media/delete",
+  "auth": true,
+  "description": "Delete a media file from storage (ownership verification required)",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "file_url": "string (full S3 URL of file to delete)"
+    },
+    "example": {
+      "file_url": "https://s3.us-central-1.wasabisys.com/craftrly/posts/1/post_xyz123.jpg"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "File deleted successfully",
+      "data": {
+        "deleted_file": "https://s3.us-central-1.wasabisys.com/craftrly/posts/1/post_xyz123.jpg"
+      }
+    }
+  },
+  "errors": {
+    "401": {
+      "status": "error",
+      "message": "Unauthorized - must be authenticated"
+    },
+    "403": {
+      "status": "error",
+      "message": "Forbidden - you can only delete your own files"
+    },
+    "404": {
+      "status": "error",
+      "message": "File not found"
+    },
+    "500": {
+      "status": "error",
+      "message": "Server error while deleting file"
+    }
+  },
+  "notes": [
+    "Files are organized by user_id in their paths",
+    "Users can only delete files they own (ownership verified via URL path)",
+    "Deletion is permanent and cannot be undone",
+    "File must be an S3 URL from the craftrly bucket",
+    "Supports deletion of posts, stories, avatars, and cover images",
+    "Manual file deletion (without database cleanup) may occur via this endpoint"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "title": "Admin Dashboard",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/dashboard",
+  "auth": true,
+  "description": "Get platform statistics and health metrics",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": {
+        "total_users": 13,
+        "active_users": 13,
+        "banned_users": 0,
+        "total_posts": 0,
+        "new_users_this_month": 13,
+        "platform_health": {
+          "user_growth_rate": 13,
+          "active_user_percentage": 100
+        }
+      }
+    }
+  }
+}

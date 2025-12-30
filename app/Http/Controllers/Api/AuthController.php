@@ -60,4 +60,39 @@ class AuthController extends Controller
 
         return response()->json(['status' => 'success', 'token' => $plain, 'user' => ['id' => $user->id, 'username' => $user->username]], 200);
     }
+
+    public function logout(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Get the token from the request
+        $token = $request->bearerToken();
+        
+        if (!$token) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No token provided'
+            ], 401);
+        }
+
+        // Hash the token to find it in the database
+        $hashedToken = hash('sha256', $token);
+        
+        // Delete the API token
+        $deleted = ApiToken::where('user_id', $user->id)
+            ->where('token', $hashedToken)
+            ->delete();
+
+        if (!$deleted) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully'
+        ], 200);
+    }
 }

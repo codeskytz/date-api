@@ -1,0 +1,29 @@
+{
+  "title": "Get Flagged Content",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/flagged-content",
+  "auth": true,
+  "description": "Get list of all flagged posts that need review",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "query": {
+      "page": 1,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [],
+      "pagination": {
+        "total": 0,
+        "page": 1,
+        "limit": 20,
+        "pages": 0
+      }
+    }
+  }
+}

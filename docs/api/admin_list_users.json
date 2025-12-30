@@ -1,0 +1,43 @@
+{
+  "title": "List Users",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/users",
+  "auth": true,
+  "description": "Get paginated list of all users with filtering and sorting options",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "query": {
+      "page": 1,
+      "limit": 20,
+      "filter": "all",
+      "sort_by": "created_at",
+      "order": "desc"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "id": 1,
+          "name": "Test User",
+          "username": "testuser9666",
+          "email": "test1688@example.com",
+          "is_active": 1,
+          "is_banned": 0,
+          "created_at": "2025-12-29T19:33:11.000000Z",
+          "last_login": null
+        }
+      ],
+      "pagination": {
+        "total": 13,
+        "page": 1,
+        "limit": 20,
+        "pages": 1
+      }
+    }
+  }
+}

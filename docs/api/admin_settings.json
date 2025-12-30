@@ -1,0 +1,26 @@
+{
+  "title": "Get System Settings",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/settings",
+  "auth": true,
+  "description": "Get current platform system settings and configuration",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": {
+        "platform_name": "Date API",
+        "version": "1.0.0",
+        "maintenance_mode": false,
+        "email_verification_required": true,
+        "user_registration_enabled": true,
+        "max_posts_per_user": 1000
+      }
+    }
+  }
+}

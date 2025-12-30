@@ -1,0 +1,78 @@
+{
+  "name": "Check OTP Status",
+  "description": "Check the current status of an OTP for a given email address",
+  "method": "GET",
+  "endpoint": "/api/v1/otp/status",
+  "authentication": "None (Public)",
+  "parameters": {
+    "query": [
+      {
+        "name": "email",
+        "type": "string",
+        "description": "The email address to check status for",
+        "example": "user@example.com",
+        "required": true
+      }
+    ]
+  },
+  "request": {
+    "description": "Check OTP status for an email"
+  },
+  "response": {
+    "description": "Returns the current status of OTP verification",
+    "example_pending": {
+      "status": "pending",
+      "message": "Waiting for OTP verification",
+      "email": "user@example.com",
+      "attempts_used": 2,
+      "attempts_remaining": 3,
+      "verified": false
+    },
+    "example_verified": {
+      "status": "verified",
+      "message": "Email is already verified",
+      "verified": true
+    },
+    "example_expired": {
+      "status": "expired",
+      "message": "OTP has expired",
+      "verified": false
+    },
+    "example_not_requested": {
+      "status": "not_requested",
+      "message": "No OTP has been requested for this email"
+    }
+  },
+  "status_codes": {
+    "200": "Status retrieved successfully"
+  },
+  "examples": {
+    "curl": "curl -X GET 'http://localhost:8000/api/v1/otp/status?email=user@example.com'",
+    "javascript": "fetch('http://localhost:8000/api/v1/otp/status?email=user@example.com')\n  .then(response => response.json())\n  .then(data => console.log(data));",
+    "python": "import requests\n\nresponse = requests.get(\n    'http://localhost:8000/api/v1/otp/status',\n    params={'email': 'user@example.com'}\n)\n\nprint(response.json())"
+  },
+  "possible_statuses": [
+    {
+      "status": "not_requested",
+      "meaning": "No OTP has been generated for this email yet"
+    },
+    {
+      "status": "pending",
+      "meaning": "OTP has been sent but not yet verified",
+      "includes": ["attempts_used", "attempts_remaining"]
+    },
+    {
+      "status": "verified",
+      "meaning": "Email has been successfully verified with OTP"
+    },
+    {
+      "status": "expired",
+      "meaning": "OTP has expired and a new one must be requested"
+    }
+  ],
+  "notes": [
+    "Use this endpoint to check if an email is verified before proceeding",
+    "Helps track remaining attempts to prevent brute force attacks",
+    "No authentication required"
+  ]
+}

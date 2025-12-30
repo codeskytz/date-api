@@ -1,0 +1,24 @@
+{
+  "title": "Admin Login",
+  "method": "POST",
+  "endpoint": "/api/v1/admin/login",
+  "auth": false,
+  "description": "Authenticate as admin user and receive admin token",
+  "request": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "email": "admin@dateapi.com",
+      "password": "admin123456"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Admin login successful",
+      "token": "admin-token-8d08f70f8b79d30ab42ee5021259cc33b13537dbb20ac05fa69df1db214b688b"
+    }
+  }
+}

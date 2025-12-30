@@ -1,0 +1,36 @@
+{
+  "title": "Get Activity Log",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/activity-log",
+  "auth": true,
+  "description": "Get activity log of user logins and platform actions",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "query": {
+      "page": 1,
+      "limit": 50
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "data": [
+        {
+          "user_id\": 1,
+          "username\": \"testuser9666\",
+          \"last_login\": null,
+          \"action\": \"User Account Created\"
+        }
+      ],
+      "pagination\": {
+        \"total\": 13,
+        \"page\": 1,
+        \"limit\": 50,
+        \"pages\": 1
+      }
+    }
+  }
+}

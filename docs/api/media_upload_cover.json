@@ -1,0 +1,35 @@
+{
+  "title": "Upload Cover Image",
+  "method": "POST",
+  "endpoint": "/api/v1/media/cover",
+  "auth": true,
+  "description": "Upload a cover image for the authenticated user's profile header",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "cover": "file (max 5MB, image format only)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Cover image uploaded successfully",
+      "data": {
+        "url": "https://s3.us-central-1.wasabisys.com/craftrly/covers/1/cover_xyz123.jpg",
+        "user_id": 1
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 5MB",
+    "Allowed formats: JPEG, PNG, GIF, WebP",
+    "Old cover image is automatically deleted when new one is uploaded",
+    "Cover URL is automatically updated in user profile",
+    "Recommended dimensions: 1200x400px for best appearance",
+    "Images stored in covers/{user_id}/{random_name}"
+  ]
+}

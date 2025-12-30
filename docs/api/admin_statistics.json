@@ -1,0 +1,29 @@
+{
+  "title": "Get Statistics",
+  "method": "GET",
+  "endpoint": "/api/v1/admin/statistics",
+  "auth": true,
+  "description": "Get platform statistics for a specific period",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "query": {
+      "period": "month"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "period": "month",
+      "data": {
+        "new_users": 13,
+        "new_posts": 0,
+        "active_users": 13,
+        "total_users": 13,
+        "total_posts": 0
+      }
+    }
+  }
+}

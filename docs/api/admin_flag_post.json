@@ -1,0 +1,31 @@
+{
+  "title": "Flag Post",
+  "method": "POST",
+  "endpoint": "/api/v1/admin/posts/{id}/flag",
+  "auth": true,
+  "description": "Flag a post for review due to policy violations",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx",
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "id": "Post ID (required)"
+    },
+    "body": {
+      "reason": "Inappropriate content"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Post flagged successfully",
+      "data": {
+        "id": 1,
+        "is_flagged": true,
+        "flag_reason": "Inappropriate content"
+      }
+    }
+  }
+}

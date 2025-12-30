@@ -10,12 +10,32 @@ use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\FollowController;
+use App\Http\Controllers\Api\OtpController;
+use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\Admin\AdminController;
 
 Route::prefix('v1')->group(function () {
     // Auth
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::post('auth/login', [AuthController::class, 'login']);
+    Route::post('auth/logout', [AuthController::class, 'logout'])->middleware('auth.token');
+
+    // Media Upload (Protected)
+    Route::middleware('auth.token')->group(function () {
+        Route::post('media/post-image', [MediaController::class, 'uploadPostImage']);
+        Route::post('media/post-video', [MediaController::class, 'uploadPostVideo']);
+        Route::post('media/avatar', [MediaController::class, 'uploadAvatar']);
+        Route::post('media/cover', [MediaController::class, 'uploadCoverImage']);
+        Route::post('media/story', [MediaController::class, 'uploadStory']);
+        Route::post('media/story-video', [MediaController::class, 'uploadStoryVideo']);
+        Route::post('media/delete', [MediaController::class, 'deleteFile']);
+    });
+
+    // OTP Verification
+    Route::post('otp/send', [OtpController::class, 'send']);
+    Route::post('otp/verify', [OtpController::class, 'verify']);
+    Route::post('otp/resend', [OtpController::class, 'resend']);
+    Route::get('otp/status', [OtpController::class, 'checkStatus']);
 
     // OAuth
     Route::get('oauth/{provider}/redirect', [OAuthController::class, 'redirect']);
@@ -74,10 +94,35 @@ Route::prefix('v1')->group(function () {
 
     // Stories feed (public)
     Route::get('stories/feed', [StoryController::class, 'feed']);
+    // Admin Routes
+    Route::prefix('admin')->group(function () {
+        // Admin Authentication (Public)
+        Route::post('login', [AdminController::class, 'login']);
 
-    // Admin
-    Route::post('admin/auth/login', [AdminController::class, 'login']);
-    Route::get('admin/dashboard', [AdminController::class, 'dashboard']);
-    Route::get('admin/users', [AdminController::class, 'users']);
-    Route::post('admin/users/{id}/ban', [AdminController::class, 'banUser']);
+        // Admin Dashboard & Statistics (Protected - in real app)
+        Route::get('dashboard', [AdminController::class, 'dashboard']);
+        Route::get('statistics', [AdminController::class, 'getStatistics']);
+        Route::get('settings', [AdminController::class, 'getSystemSettings']);
+
+        // User Management
+        Route::get('users', [AdminController::class, 'listUsers']);
+        Route::get('users/{id}', [AdminController::class, 'getUserDetails']);
+        Route::put('users/{id}', [AdminController::class, 'updateUser']);
+        Route::post('users/{id}/ban', [AdminController::class, 'banUser']);
+        Route::post('users/{id}/unban', [AdminController::class, 'unbanUser']);
+        Route::delete('users/{id}', [AdminController::class, 'deleteUser']);
+
+        // Post Management
+        Route::get('posts', [AdminController::class, 'listPosts']);
+        Route::get('posts/{id}', [AdminController::class, 'getPostDetails']);
+        Route::delete('posts/{id}', [AdminController::class, 'deletePost']);
+        Route::post('posts/{id}/flag', [AdminController::class, 'flagPost']);
+        Route::post('posts/{id}/unflag', [AdminController::class, 'unflagPost']);
+
+        // Content Moderation
+        Route::get('flagged-content', [AdminController::class, 'getFlaggedContent']);
+
+        // Activity Log
+        Route::get('activity-log', [AdminController::class, 'getActivityLog']);
+    });
 });

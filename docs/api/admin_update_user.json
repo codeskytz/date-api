@@ -1,0 +1,35 @@
+{
+  "title": "Update User",
+  "method": "PUT",
+  "endpoint": "/api/v1/admin/users/{id}",
+  "auth": true,
+  "description": "Update user information",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx",
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "id": "User ID (required)"
+    },
+    "body": {
+      "name": "Updated Name",
+      "email": "newemail@example.com",
+      "phone": "1234567890",
+      "bio": "User bio",
+      "is_active": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "User updated successfully",
+      "data": {
+        "id": 1,
+        "name": "Updated Name",
+        "email": "newemail@example.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Upload Story",
+  "method": "POST",
+  "endpoint": "/api/v1/media/story",
+  "auth": true,
+  "description": "Upload a story image with optional caption and configurable expiration time",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "image": "file (max 5MB, image format only)",
+      "caption": "string (optional, max 500 characters)",
+      "duration": "integer (optional, minutes until expiration, default 1440 - 24 hours)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Story created successfully",
+      "data": {
+        "id": 5,
+        "user_id": 1,
+        "image": "https://s3.us-central-1.wasabisys.com/craftrly/stories/1/story_xyz123.jpg",
+        "caption": "Beautiful sunset",
+        "expires_at": "2024-12-31T18:25:00Z",
+        "is_deleted": false,
+        "created_at": "2024-12-30T18:25:00Z"
+      }
+    }
+  },
+  "errors": {
+    "422": {
+      "status": "error",
+      "message": "Validation failed",
+      "errors": {
+        "image": ["The image must be an image"]
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 5MB",
+    "Allowed formats: JPEG, PNG, GIF, WebP",
+    "Default expiration: 24 hours (1440 minutes)",
+    "Minimum expiration: 5 minutes",
+    "Maximum expiration: 30 days (43200 minutes)",
+    "Expired stories are not automatically deleted but marked as is_deleted",
+    "Caption is optional and limited to 500 characters",
+    "Images stored in stories/{user_id}/{random_name}",
+    "Stories are displayed in feed until expiration time"
+  ]
+}

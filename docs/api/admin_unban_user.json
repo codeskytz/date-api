@@ -1,0 +1,27 @@
+{
+  "title": "Unban User",
+  "method": "POST",
+  "endpoint": "/api/v1/admin/users/{id}/unban",
+  "auth": true,
+  "description": "Unban a previously banned user",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "parameters": {
+      "id": "User ID (required)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "User unbanned successfully",
+      "data": {
+        "id": 2,
+        "username": "testuser7396",
+        "is_banned": false
+      }
+    }
+  }
+}

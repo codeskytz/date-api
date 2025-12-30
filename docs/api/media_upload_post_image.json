@@ -1,0 +1,33 @@
+{
+  "title": "Upload Post Image",
+  "method": "POST",
+  "endpoint": "/api/v1/media/post-image",
+  "auth": true,
+  "description": "Upload an image for a post to Wasabi S3 object storage",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "image": "file (max 5MB, image format only)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Image uploaded successfully",
+      "data": {
+        "url": "https://s3.us-central-1.wasabisys.com/craftrly/posts/1/abc123xyz.jpg",
+        "size": 2048576
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 5MB",
+    "Allowed formats: JPEG, PNG, GIF, WebP",
+    "Images are stored in Wasabi S3 under posts/{user_id}/{random_name}",
+    "URL is publicly accessible"
+  ]
+}

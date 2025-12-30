@@ -1,0 +1,22 @@
+{
+  "title": "Delete User",
+  "method": "DELETE",
+  "endpoint": "/api/v1/admin/users/{id}",
+  "auth": true,
+  "description": "Delete a user from the platform permanently",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "parameters": {
+      "id": "User ID (required)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "User deleted successfully"
+    }
+  }
+}

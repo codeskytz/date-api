@@ -1,0 +1,43 @@
+{
+  "name": "Logout",
+  "description": "Logout the authenticated user and invalidate their API token",
+  "method": "POST",
+  "endpoint": "/api/v1/auth/logout",
+  "authentication": "Bearer Token (Required)",
+  "parameters": {
+    "headers": [
+      {
+        "name": "Authorization",
+        "type": "string",
+        "description": "Bearer token for authentication",
+        "example": "Bearer YOUR_API_TOKEN",
+        "required": true
+      }
+    ]
+  },
+  "request": {
+    "description": "No body required"
+  },
+  "response": {
+    "description": "Returns a success message with logout confirmation",
+    "example": {
+      "status": "success",
+      "message": "Logged out successfully"
+    }
+  },
+  "status_codes": {
+    "200": "Successfully logged out",
+    "401": "Unauthorized - No token provided or invalid token",
+    "404": "Token not found"
+  },
+  "examples": {
+    "curl": "curl -X POST http://localhost:8000/api/v1/auth/logout \\\n  -H 'Authorization: Bearer YOUR_API_TOKEN'",
+    "javascript": "fetch('http://localhost:8000/api/v1/auth/logout', {\n  method: 'POST',\n  headers: {\n    'Authorization': 'Bearer YOUR_API_TOKEN'\n  }\n})\n.then(response => response.json())\n.then(data => console.log(data));",
+    "python": "import requests\n\nheaders = {\n    'Authorization': 'Bearer YOUR_API_TOKEN'\n}\n\nresponse = requests.post(\n    'http://localhost:8000/api/v1/auth/logout',\n    headers=headers\n)\n\nprint(response.json())"
+  },
+  "notes": [
+    "The API token will be invalidated after logout",
+    "You cannot use the same token for subsequent requests after logout",
+    "A new token must be obtained by logging in again"
+  ]
+}

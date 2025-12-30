@@ -1,0 +1,37 @@
+{
+  "title": "Upload Post Video",
+  "method": "POST",
+  "endpoint": "/api/v1/media/post-video",
+  "auth": true,
+  "description": "Upload a video file for a post (supports MP4, WebM, MOV, AVI, MKV)",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "video": "file (max 100MB, video format only)"
+    },
+    "supportedFormats": ["mp4", "webm", "mov", "avi", "mkv"]
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Video uploaded successfully",
+      "data": {
+        "url": "https://s3.us-central-1.wasabisys.com/craftrly/videos/1/video_xyz123.mp4",
+        "size": 52428800,
+        "status": "pending"
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 100MB",
+    "Allowed formats: MP4, WebM, MOV, AVI, MKV",
+    "Video status starts as 'pending' - may need processing before ready",
+    "Videos stored in videos/{user_id}/{random_name}",
+    "Recommended to use MP4 for maximum compatibility",
+    "Video processing status can be 'pending', 'processing', 'ready', or 'failed'"
+  ]
+}

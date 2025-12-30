@@ -1,0 +1,34 @@
+{
+  "title": "Upload User Avatar",
+  "method": "POST",
+  "endpoint": "/api/v1/media/avatar",
+  "auth": true,
+  "description": "Upload an avatar image for the authenticated user profile",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer token-xxx",
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "avatar": "file (max 2MB, image format only)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Avatar uploaded successfully",
+      "data": {
+        "url": "https://s3.us-central-1.wasabisys.com/craftrly/avatars/1/avatar_xyz123.jpg",
+        "user_id": 1
+      }
+    }
+  },
+  "notes": [
+    "Maximum file size: 2MB",
+    "Allowed formats: JPEG, PNG, GIF, WebP",
+    "Old avatar is automatically deleted when new one is uploaded",
+    "Avatar URL is automatically updated in user profile",
+    "Images stored in avatars/{user_id}/{random_name}"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Delete Post",
+  "method": "DELETE",
+  "endpoint": "/api/v1/admin/posts/{id}",
+  "auth": true,
+  "description": "Delete a post from the platform",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx"
+    },
+    "parameters": {
+      "id": "Post ID (required)"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "Post deleted successfully"
+    }
+  }
+}

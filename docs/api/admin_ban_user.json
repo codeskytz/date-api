@@ -1,0 +1,31 @@
+{
+  "title": "Ban User",
+  "method": "POST",
+  "endpoint": "/api/v1/admin/users/{id}/ban",
+  "auth": true,
+  "description": "Ban a user from the platform",
+  "request": {
+    "headers": {
+      "Authorization": "Bearer admin-token-xxx",
+      "Content-Type": "application/json"
+    },
+    "parameters": {
+      "id": "User ID (required)"
+    },
+    "body": {
+      "reason": "Violation of terms of service"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "status": "success",
+      "message": "User banned successfully",
+      "data": {
+        "id": 2,
+        "username": "testuser7396",
+        "is_banned": true
+      }
+    }
+  }
+}
