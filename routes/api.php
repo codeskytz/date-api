@@ -93,6 +93,8 @@ Route::prefix('v1')->group(function () {
 
     // Public routes
     Route::get('posts/{id}', [PostController::class, 'show']);
+    Route::get('search/posts', [PostController::class, 'search']);
+    Route::get('search/users', [UserController::class, 'search']);
     Route::get('users/{username}', [UserController::class, 'show']);
     Route::get('users/{username}/posts', [PostController::class, 'userPosts']);
     Route::get('users/{username}/followers', [FollowController::class, 'followers']);

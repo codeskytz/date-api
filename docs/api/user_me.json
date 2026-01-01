@@ -16,19 +16,27 @@
       "Content-Type": "application/json"
     },
     "body": {
-      "id": 8,
-      "name": "John Doe",
-      "username": "johndoe",
-      "email": "john@example.com",
-      "avatar": null,
-      "followers": 0,
-      "following": 0
+      "status": "success",
+      "data": {
+        "id": 8,
+        "name": "John Doe",
+        "username": "johndoe",
+        "email": "john@example.com",
+        "avatar": null,
+        "bio": "Software developer and coffee enthusiast",
+        "verified": false,
+        "followers": 0,
+        "following": 0
+      }
     }
   },
   "notes": [
     "Requires valid Bearer token in Authorization header",
     "Returns 401 Unauthorized if token is missing or invalid",
+    "Response structure: { status: 'success', data: { user object } }",
     "Avatar is null if not set",
-    "Follower and following counts are returned"
+    "Bio is included in the response",
+    "Verified status indicates if user has verified badge",
+    "Follower and following counts are returned as integers"
   ]
 }

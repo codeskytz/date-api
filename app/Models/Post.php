@@ -57,6 +57,25 @@ class Post extends Model
     }
 
     /**
+     * Get the likes for the post.
+     */
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    /**
+     * Check if the post is liked by a specific user.
+     */
+    public function isLikedBy($user)
+    {
+        if (!$user) {
+            return false;
+        }
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
      * Check if the post is flagged.
      */
     public function isFlagged(): bool
