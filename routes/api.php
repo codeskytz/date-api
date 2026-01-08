@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\VerificationController;
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\DiscoverController;
+use App\Http\Controllers\Api\ConversationController;
 
 Route::prefix('v1')->group(function () {
     // Auth
@@ -60,7 +62,10 @@ Route::prefix('v1')->group(function () {
         // Posts
         Route::get('my-posts', [PostController::class, 'myPosts']);
         Route::post('posts', [PostController::class, 'store']);
+        // Reels (reuse posts table with is_reel flag)
+        Route::post('reels', [PostController::class, 'store']);
         Route::post('posts/{id}/like', [PostController::class, 'like']);
+        Route::get('posts/{id}/comments', [PostController::class, 'getComments']);
         Route::post('posts/{id}/comments', [PostController::class, 'comment']);
         Route::post('posts/{id}/save', [PostController::class, 'save']);
 

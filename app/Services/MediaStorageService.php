@@ -87,11 +87,61 @@ class MediaStorageService
         $filename = Str::random(32) . '.' . $file->getClientOriginalExtension();
         $fullPath = $path . '/' . $filename;
 
-        // Store on S3/Wasabi
-        Storage::disk('s3')->putFileAs($path, $file, $filename, 'public');
+        // Store on S3/Wasabi - Wasabi free tier requires presigned URLs
+        Storage::disk('s3')->putFileAs($path, $file, $filename, 'private');
 
-        // Return the URL
-        return Storage::disk('s3')->url($fullPath);
+        // Return presigned URL valid for 1 year
+        return $this->generatePresignedUrl($fullPath);
+    }
+
+    /**
+     * Generate a presigned URL for S3/Wasabi files (works with private buckets)
+     */
+    private function generatePresignedUrl(string $path): string
+    {
+        try {
+            $disk = Storage::disk('s3');
+            $adapter = $disk->getAdapter();
+            
+            // Use reflection to access the private client property
+            $reflection = new \ReflectionClass($adapter);
+            $clientProperty = $reflection->getProperty('client');
+            $clientProperty->setAccessible(true);
+            $client = $clientProperty->getValue($adapter);
+            
+            // Also get the bucket name
+            $bucketProperty = $reflection->getProperty('bucket');
+            $bucketProperty->setAccessible(true);
+            $bucket = $bucketProperty->getValue($adapter);
+            
+            // Create a GetObject command
+            $cmd = $client->getCommand('GetObject', [
+                'Bucket' => $bucket,
+                'Key' => $path,
+            ]);
+            
+            // Create a presigned request that expires in 7 days (Wasabi limit)
+            $request = $client->createPresignedRequest($cmd, '+7 days');
+            
+            // Get the presigned URL
+            $presignedUrl = (string)$request->getUri();
+            
+            \Log::info('Presigned URL generated', [
+                'path' => $path,
+                'bucket' => $bucket,
+                'url_start' => substr($presignedUrl, 0, 100),
+            ]);
+            
+            return $presignedUrl;
+        } catch (\Exception $e) {
+            \Log::error('Failed to generate presigned URL: ' . $e->getMessage(), [
+                'path' => $path,
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
+            // Fallback to regular URL (may not work if bucket is private)
+            return Storage::disk('s3')->url($path);
+        }
     }
 
     /**

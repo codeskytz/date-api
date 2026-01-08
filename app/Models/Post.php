@@ -14,17 +14,25 @@ class Post extends Model
         'user_id',
         'title',
         'description',
+        'content',
+        'media',
         'image',
         'video',
+        'thumbnail',
         'video_status',
         'video_duration',
+        'likes_count',
+        'comments_count',
         'is_flagged',
+        'is_reel',
         'flag_reason',
         'flagged_at',
     ];
 
     protected $casts = [
+        'media' => 'array',
         'is_flagged' => 'boolean',
+        'is_reel' => 'boolean',
         'flagged_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -65,6 +73,33 @@ class Post extends Model
     }
 
     /**
+     * Get the comments for the post.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the saved posts relationship.
+     */
+    public function savedBy()
+    {
+        return $this->hasMany(SavedPost::class);
+    }
+
+    /**
+     * Check if the post is saved by a specific user.
+     */
+    public function isSavedBy($user)
+    {
+        if (!$user) {
+            return false;
+        }
+        return $this->savedBy()->where('user_id', $user->id)->exists();
+    }
+
+    /**
      * Check if the post is liked by a specific user.
      */
     public function isLikedBy($user)
@@ -86,7 +121,7 @@ class Post extends Model
     /**
      * Flag the post.
      */
-    public function flag(string $reason = null)
+    public function flag(?string $reason = null)
     {
         $this->update([
             'is_flagged' => true,
